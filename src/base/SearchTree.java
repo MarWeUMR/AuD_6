@@ -31,12 +31,16 @@ public class SearchTree<T extends Comparable<T>> {
         }
     }
 
-    public void insertion(T val) {
+    public void insertion(T val){
+        insertion_recursive(val);
+    }
+
+    private void insertion_recursive(T val) {
 
         Node node = new Node(val);
 
         Node y = null;
-        Node x = this.treeRoot;
+        Node x = treeRoot;
 
         while (x != null) { // wenn elemente im tree
             y = x; // temporär root element sichern

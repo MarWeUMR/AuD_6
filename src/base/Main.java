@@ -18,6 +18,7 @@ public class Main {
         System.out.println(Tree.max());
         System.out.println(Tree.min());
 
+        System.out.println(Tree.search(4));
         System.out.println(Tree.toSortedArrayList());
 
 

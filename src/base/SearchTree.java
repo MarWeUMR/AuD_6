@@ -114,11 +114,11 @@ public class SearchTree<T extends Comparable<T>> {
         return (T) max_recursive(treeRoot).value;
     }
 
-    public Node min_recursive(Node node) {
+    private Node min_recursive(Node node) {
         return (node.leftChild != null) ? min_recursive(node.leftChild) : node;
     }
 
-    public Node max_recursive(Node node) {
+    private Node max_recursive(Node node) {
         return (node.rightChild != null) ? max_recursive(node.rightChild) : node;
     }
 

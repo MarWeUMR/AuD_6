@@ -1,5 +1,7 @@
 package base;
 
+import java.util.ArrayList;
+
 public class SearchTree<T extends Comparable<T>> {
 
     private Node treeRoot;
@@ -55,55 +57,84 @@ public class SearchTree<T extends Comparable<T>> {
         }
     }
 
-    public Node deletion(Node<T> node, T val) {
-            // search the val
-            if (node == null) return node;
-            else if (val.compareTo(node.value) < 0) node.leftChild = deletion(node.leftChild, val);
-            else if (val.compareTo(node.value) > 0) node.rightChild = deletion(node.rightChild, val);
-            else {
-                // the val has been found, now delete it
+    public void deletion(T val) {
+        treeRoot = deletion_recursive(treeRoot, val); // Ancestor backup
+    }
 
-                // case 1: node is a leaf node
-                if (node.leftChild == null && node.rightChild == null) {
-                    node = null;
-                }
+    private Node deletion_recursive(Node<T> node, T val) {
 
-                // case 2: node has only one child
-                else if (node.leftChild == null) {
-                    Node temp = node;
-                    node = node.rightChild;
-                }
+        // Suche nach Wert
+        if (node == null) return node;
+        else if (val.compareTo(node.value) < 0) {
+            node.leftChild = deletion_recursive(node.leftChild, val);
+        } else if (val.compareTo(node.value) > 0) {
+            node.rightChild = deletion_recursive(node.rightChild, val);
+        } else { // Wert gefunden
 
-                else if (node.rightChild == null) {
-                    Node temp = node;
-                    node = node.leftChild;
-                }
-
-                // case 3: has both children
-                else {
-                    //Node temp = minimum(node.rightChild);
-                    //node.value = temp.value;
-                    //node.rightChild = deletion(node.rightChild, temp.value);
-                }
-
+            // blatt löschen
+            if (node.leftChild == null && node.rightChild == null) {
+                node = null;
+            } else if (node.leftChild == null) {// knoten mit einem kind
+                Node temp = node;
+                node = node.rightChild;
+            } else if (node.rightChild == null) {
+                Node temp = node;
+                node = node.leftChild;
             }
-            return node;
+
+            // knoten mit zwei kindern
+            else {
+                Node<T> temp = min_recursive(node.rightChild);
+                node.value = temp.value;
+                node.rightChild = deletion_recursive(node.rightChild, temp.value);
+            }
         }
-
-    public void search() {
-
+        return node;
     }
 
-    public void min() {
-
+    public boolean search(T val) {
+        return search_recursive(treeRoot, val);
     }
 
-    public void max() {
-
+    private boolean search_recursive(Node<T> node, T val) {
+        if (node == null) return false;
+        if (node.value.equals(val)) return true;
+        if (val.compareTo(node.value) < 0) { // linkes kind wenn kleiner
+            return search_recursive(node.leftChild, val);
+        } else { // rechtes kind wenn größer
+            return search_recursive(node.rightChild, val);
+        }
     }
 
-    public void toSortedArrayList() {
+    public T min() {
+        return (T) min_recursive(treeRoot).value;
+    }
 
+    public T max() {
+        return (T) max_recursive(treeRoot).value;
+    }
+
+    public Node min_recursive(Node node) {
+        return (node.leftChild != null) ? min_recursive(node.leftChild) : node;
+    }
+
+    public Node max_recursive(Node node) {
+        return (node.rightChild != null) ? max_recursive(node.rightChild) : node;
+    }
+
+    public ArrayList<T> toSortedArrayList() {
+        ArrayList<T> l = new ArrayList<>();
+        return inorderTreeWalk(l, treeRoot);
+    }
+
+    private ArrayList<T> inorderTreeWalk(ArrayList<T> l, Node<T> node) {
+
+        if (node != null) {
+            inorderTreeWalk(l, node.leftChild);
+            l.add(node.value);
+            inorderTreeWalk(l, node.rightChild);
+        }
+        return l;
     }
 
 

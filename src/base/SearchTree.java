@@ -39,25 +39,25 @@ public class SearchTree<T extends Comparable<T>> {
 
         Node node = new Node(val);
 
-        Node y = null;
-        Node x = treeRoot;
+        Node ancestor = null;
+        Node root = treeRoot;
 
-        while (x != null) { // wenn elemente im tree
-            y = x; // temporär root element sichern
-            if (node.value.compareTo(x.value) < 0) {
-                x = x.leftChild;
+        while (root != null) { // wenn elemente im tree
+            ancestor = root; // temporär root element sichern
+            if (node.value.compareTo(root.value) < 0) {
+                root = root.leftChild;
             } else {
-                x = x.rightChild;
+                root = root.rightChild;
             }
         }
 
-        node.ancestor = y; // ancestor auf ggf. gesicherten ancestor y setzen
-        if (y == null) { // treeRoot setten, wenn noch keine Elemente vorhanden sind
+        node.ancestor = ancestor; // ancestor auf ggf. gesicherten ancestor y setzen
+        if (ancestor == null) { // treeRoot setten, wenn noch keine Elemente vorhanden sind
             treeRoot = node;
-        } else if (node.value.compareTo(y.value) < 0) {
-            y.leftChild = node;
+        } else if (node.value.compareTo(ancestor.value) < 0) {
+            ancestor.leftChild = node;
         } else {
-            y.rightChild = node;
+            ancestor.rightChild = node;
         }
     }
 
